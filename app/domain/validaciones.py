@@ -5,6 +5,9 @@ from app.domain.errores import ValidacionError
 from app.domain.reporte import TIPOS_BARRERA
 
 
+DESCRIPCION_MAX = 500
+
+
 @dataclass
 class SolicitudRegistro:
     """Datos crudos que llegan desde cualquier canal (web, WhatsApp...)."""
@@ -32,8 +35,11 @@ def validar_solicitud(s):
     if id_tipo not in TIPOS_BARRERA:
         raise ValidacionError("id_tipo", "Seleccione un tipo de barrera válido.")
 
-    if not s.descripcion:
+    descripcion = (s.descripcion or "").strip()
+    if not descripcion:
         raise ValidacionError("descripcion", "La descripción es obligatoria.")
+    if len(descripcion) > DESCRIPCION_MAX:
+        raise ValidacionError("descripcion", f"La descripción no puede superar {DESCRIPCION_MAX} caracteres.")
 
     try:
         latitud = float(s.latitud)
@@ -44,4 +50,4 @@ def validar_solicitud(s):
     if s.foto is None or not s.foto.contenido:
         raise ValidacionError("foto", "La fotografía es obligatoria.")
 
-    return DatosValidados(id_tipo, s.descripcion, latitud, longitud)
+    return DatosValidados(id_tipo, descripcion, latitud, longitud)
