@@ -7,6 +7,10 @@ from app.domain.reporte import TIPOS_BARRERA
 
 DESCRIPCION_MAX = 500
 
+# Area referencial de Arequipa metropolitana (debe validarse con la municipalidad)
+LATITUD_MIN, LATITUD_MAX = -16.55, -16.25
+LONGITUD_MIN, LONGITUD_MAX = -71.75, -71.35
+
 
 @dataclass
 class SolicitudRegistro:
@@ -46,6 +50,9 @@ def validar_solicitud(s):
         longitud = float(s.longitud)
     except (TypeError, ValueError):
         raise ValidacionError("ubicacion", "La ubicación indicada no es válida.")
+
+    if not (LATITUD_MIN <= latitud <= LATITUD_MAX and LONGITUD_MIN <= longitud <= LONGITUD_MAX):
+        raise ValidacionError("ubicacion", "La ubicación debe estar dentro del área de Arequipa.")
 
     if s.foto is None or not s.foto.contenido:
         raise ValidacionError("foto", "La fotografía es obligatoria.")
