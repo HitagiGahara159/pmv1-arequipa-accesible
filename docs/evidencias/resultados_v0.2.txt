@@ -20,6 +20,6 @@ test_cp10_tipo_de_barrera_inexistente_rechazado (test_registrar_reporte.PruebasR
 CP-10 (CA-06): tipo de barrera fuera del catálogo es rechazado ... ok
 
 ----------------------------------------------------------------------
-Ran 10 tests in 0.140s
+Ran 10 tests in 0.133s
 
 OK
