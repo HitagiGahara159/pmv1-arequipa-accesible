@@ -1,0 +1,61 @@
+test_cp01_registro_exitoso (test_registrar_reporte.PruebasRegistroReporte.test_cp01_registro_exitoso)
+CP-01 (CA-01): registro exitoso con estado PENDIENTE e identificador ... ok
+test_cp02_reporte_consultable (test_registrar_reporte.PruebasRegistroReporte.test_cp02_reporte_consultable)
+CP-02 (CA-01): el reporte guardado se puede recuperar con sus datos ... ok
+test_cp03_descripcion_vacia_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp03_descripcion_vacia_rechazada)
+CP-03 (CA-02): descripción vacía es rechazada con mensaje ... ok
+test_cp04_descripcion_solo_espacios_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp04_descripcion_solo_espacios_rechazada)
+CP-04 (CA-02): descripción con solo espacios es rechazada con mensaje ... FAIL
+test_cp05_ubicacion_no_numerica_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp05_ubicacion_no_numerica_rechazada)
+CP-05 (CA-03): ubicación no numérica es rechazada ... ok
+test_cp06_ubicacion_fuera_de_arequipa_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp06_ubicacion_fuera_de_arequipa_rechazada)
+CP-06 (CA-03): ubicación fuera del área de Arequipa es rechazada ... FAIL
+test_cp07_foto_ausente_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp07_foto_ausente_rechazada)
+CP-07 (CA-04): reporte sin fotografía es rechazado ... ok
+test_cp08_formato_de_foto_no_permitido_rechazado (test_registrar_reporte.PruebasRegistroReporte.test_cp08_formato_de_foto_no_permitido_rechazado)
+CP-08 (CA-04): archivo que no es JPG o PNG es rechazado ... FAIL
+test_cp09_base_de_datos_no_disponible (test_registrar_reporte.PruebasRegistroReporte.test_cp09_base_de_datos_no_disponible)
+CP-09 (CA-05): con la BD caída se informa el error y no se confirma el registro ... FAIL
+test_cp10_tipo_de_barrera_inexistente_rechazado (test_registrar_reporte.PruebasRegistroReporte.test_cp10_tipo_de_barrera_inexistente_rechazado)
+CP-10 (CA-06): tipo de barrera fuera del catálogo es rechazado ... ok
+
+======================================================================
+FAIL: test_cp04_descripcion_solo_espacios_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp04_descripcion_solo_espacios_rechazada)
+CP-04 (CA-02): descripción con solo espacios es rechazada con mensaje
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/claude/work/pmv1/tests/test_registrar_reporte.py", line 96, in test_cp04_descripcion_solo_espacios_rechazada
+    self.assertEqual(resp.status_code, 400)
+AssertionError: 500 != 400
+
+======================================================================
+FAIL: test_cp06_ubicacion_fuera_de_arequipa_rechazada (test_registrar_reporte.PruebasRegistroReporte.test_cp06_ubicacion_fuera_de_arequipa_rechazada)
+CP-06 (CA-03): ubicación fuera del área de Arequipa es rechazada
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/claude/work/pmv1/tests/test_registrar_reporte.py", line 111, in test_cp06_ubicacion_fuera_de_arequipa_rechazada
+    self.assertEqual(resp.status_code, 400)
+AssertionError: 201 != 400
+
+======================================================================
+FAIL: test_cp08_formato_de_foto_no_permitido_rechazado (test_registrar_reporte.PruebasRegistroReporte.test_cp08_formato_de_foto_no_permitido_rechazado)
+CP-08 (CA-04): archivo que no es JPG o PNG es rechazado
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/claude/work/pmv1/tests/test_registrar_reporte.py", line 128, in test_cp08_formato_de_foto_no_permitido_rechazado
+    self.assertEqual(resp.status_code, 400)
+AssertionError: 201 != 400
+
+======================================================================
+FAIL: test_cp09_base_de_datos_no_disponible (test_registrar_reporte.PruebasRegistroReporte.test_cp09_base_de_datos_no_disponible)
+CP-09 (CA-05): con la BD caída se informa el error y no se confirma el registro
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/claude/work/pmv1/tests/test_registrar_reporte.py", line 138, in test_cp09_base_de_datos_no_disponible
+    self.assertEqual(resp.status_code, 503)
+AssertionError: 500 != 503
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.176s
+
+FAILED (failures=4)
