@@ -1,4 +1,4 @@
-"""Reglas de validación de un reporte (versión 0.1)."""
+"""Reglas de validación de un reporte (versión 0.2)."""
 from dataclasses import dataclass
 
 from app.domain.errores import ValidacionError

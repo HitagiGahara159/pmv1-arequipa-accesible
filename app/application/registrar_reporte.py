@@ -1,4 +1,5 @@
-"""Caso de uso HU-01: registrar un reporte de barrera de accesibilidad (versión 0.1)."""
+"""Caso de uso HU-01: registrar un reporte de barrera de accesibilidad (versión 0.2)."""
+from app.domain.errores import PersistenciaError
 from app.domain.reporte import Reporte
 from app.domain.validaciones import SolicitudRegistro, validar_solicitud
 from app.ports.foto_storage import FotoStorage
@@ -21,4 +22,8 @@ class RegistrarReporte:
             foto_ruta=ruta_foto,
             canal=solicitud.canal,
         )
-        return self._repo.guardar(reporte)
+        try:
+            return self._repo.guardar(reporte)
+        except PersistenciaError:
+            self._fotos.eliminar(ruta_foto)  # no dejar fotos huérfanas
+            raise

@@ -1,9 +1,12 @@
-"""Adaptador de entrada web (Flask). Traduce HTTP a llamadas al caso de uso (versión 0.1)."""
+"""Adaptador de entrada web (Flask). Traduce HTTP a llamadas al caso de uso (versión 0.2)."""
 from flask import Blueprint, jsonify, render_template, request
 
-from app.domain.errores import ValidacionError
+from app.domain.errores import PersistenciaError, ValidacionError
 from app.domain.reporte import TIPOS_BARRERA, FotoAdjunta
 from app.domain.validaciones import SolicitudRegistro
+
+
+MENSAJE_ERROR_PERSISTENCIA = "La operación no pudo completarse. Intente nuevamente más tarde."
 
 
 def crear_blueprint(caso_uso_registrar, repositorio):
@@ -31,6 +34,8 @@ def crear_blueprint(caso_uso_registrar, repositorio):
             reporte = caso_uso_registrar.ejecutar(solicitud)
         except ValidacionError as error:
             return jsonify({"error": error.mensaje, "campo": error.campo}), 400
+        except PersistenciaError:
+            return jsonify({"error": MENSAJE_ERROR_PERSISTENCIA}), 503
         return jsonify({
             "id": reporte.id_reporte,
             "codigo_caso": reporte.codigo_caso,
@@ -39,7 +44,10 @@ def crear_blueprint(caso_uso_registrar, repositorio):
 
     @bp.get("/api/reportes/<int:id_reporte>")
     def consultar(id_reporte):
-        reporte = repositorio.obtener(id_reporte)
+        try:
+            reporte = repositorio.obtener(id_reporte)
+        except PersistenciaError:
+            return jsonify({"error": MENSAJE_ERROR_PERSISTENCIA}), 503
         if reporte is None:
             return jsonify({"error": "Reporte no encontrado."}), 404
         return jsonify({
