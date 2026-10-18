@@ -15,6 +15,7 @@ def create_app(configuracion=None):
     config = configuracion or obtener_configuracion()
     app = Flask(__name__)
     app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
+    app.json.ensure_ascii = False  # tildes legibles en las respuestas JSON
 
     database = Database(config["DATABASE_PATH"])
     database.inicializar()

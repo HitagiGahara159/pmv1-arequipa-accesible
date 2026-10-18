@@ -1,0 +1,30 @@
+$ python main.py            # servidor Flask en http://127.0.0.1:5000
+
+$ curl -s http://127.0.0.1:5000/ | grep "<title>"
+  <title>Arequipa Accesible - Nuevo reporte</title>
+
+$ curl -s -X POST http://127.0.0.1:5000/api/reportes -F id_tipo=2 -F descripcion="No hay rampa frente al hospital" -F latitud=-16.3989 -F longitud=-71.5350 -F foto=@foto.png
+{"codigo_caso":"AQP-000001","estado":"PENDIENTE","id":1}
+  [HTTP 201]
+
+$ curl -s -X POST ... -F descripcion="   "          # descripcion con solo espacios (CA-02)
+{"campo":"descripcion","error":"La descripci\u00f3n es obligatoria."}
+  [HTTP 400]
+
+$ curl -s -X POST ... -F latitud=-12.0464 -F longitud=-77.0428   # ubicacion en Lima (CA-03)
+{"campo":"ubicacion","error":"La ubicaci\u00f3n debe estar dentro del \u00e1rea de Arequipa."}
+  [HTTP 400]
+
+$ curl -s http://127.0.0.1:5000/api/reportes/1
+{"canal":"WEB","codigo_caso":"AQP-000001","descripcion":"No hay rampa frente al hospital","estado":"PENDIENTE","fecha_creacion":"2026-10-18 19:04:41","id":1,"latitud":-16.3989,"longitud":-71.535,"tipo_barrera":"Sin rampa"}
+  [HTTP 200]
+
+$ sqlite3 pmv1.db "SELECT id_reporte, id_tipo, canal, estado, descripcion FROM reporte"
+id_reporte | id_tipo | canal | estado    | descripcion
+         1 |       2 | WEB   | PENDIENTE | No hay rampa frente al hospital
+
+$ sqlite3 pmv1.db "SELECT * FROM historial_estado"
+id_historial | id_reporte | estado
+           1 |          1 | PENDIENTE
+
+$ ls uploads/   -> 1 foto(s) guardada(s)
