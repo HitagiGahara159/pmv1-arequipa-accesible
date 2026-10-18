@@ -1,0 +1,44 @@
+@startuml
+title PMV1 Arequipa Accesible - Arquitectura hexagonal
+skinparam componentStyle rectangle
+left to right direction
+
+actor "Ciudadano" as U
+
+package "Adaptadores de entrada" {
+  [Adaptador web (Flask)] as WEB
+  [Adaptador WhatsApp (siguiente incremento)] as WA
+}
+
+package "Nucleo (hexagono)" {
+  [Caso de uso Registrar reporte] as UC
+  [Dominio: Reporte y reglas de validacion] as DOM
+}
+
+package "Puertos de salida" {
+  interface "ReporteRepository" as PR
+  interface "FotoStorage" as PF
+  interface "PrioridadPredictor (siguiente incremento)" as PI
+}
+
+package "Adaptadores de salida" {
+  [Repositorio SQLite] as AR
+  [Almacen local de fotos] as AF
+  [Modelo IA scikit-learn (siguiente incremento)] as AI
+}
+
+database "Base de datos SQLite" as DB
+
+U --> WEB
+U ..> WA
+WEB --> UC
+WA ..> UC
+UC --> DOM
+UC --> PR
+UC --> PF
+UC ..> PI
+AR ..> PR : implementa
+AF ..> PF : implementa
+AI ..> PI : implementa
+AR --> DB
+@enduml

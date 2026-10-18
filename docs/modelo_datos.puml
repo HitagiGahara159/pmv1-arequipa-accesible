@@ -1,0 +1,52 @@
+@startuml
+title PMV1 Arequipa Accesible - Modelo de datos inicial
+hide circle
+skinparam linetype ortho
+
+entity "tipo_barrera" as tipo_barrera {
+  * id_tipo : INTEGER <<PK>>
+  --
+  * nombre : TEXT <<UNIQUE>>
+}
+
+entity "reporte" as reporte {
+  * id_reporte : INTEGER <<PK>>
+  --
+  * id_tipo : INTEGER <<FK>>
+  * canal : TEXT
+  * descripcion : TEXT
+  * latitud : REAL
+  * longitud : REAL
+  * foto_ruta : TEXT
+  * estado : TEXT
+  * fecha_creacion : TEXT
+}
+
+entity "historial_estado" as historial_estado {
+  * id_historial : INTEGER <<PK>>
+  --
+  * id_reporte : INTEGER <<FK>>
+  * estado : TEXT
+  * fecha_cambio : TEXT
+}
+
+entity "prediccion_prioridad" as prediccion_prioridad {
+  * id_prediccion : INTEGER <<PK>>
+  --
+  * id_reporte : INTEGER <<FK>>
+  * probabilidad : REAL
+  * nivel : TEXT
+  nivel_corregido : TEXT
+  * fecha : TEXT
+}
+
+note right of prediccion_prioridad
+  Siguiente incremento:
+  guarda la prediccion de la PoC
+  y la correccion del administrador.
+end note
+
+tipo_barrera ||--o{ reporte
+reporte ||--o{ historial_estado
+reporte ||--o| prediccion_prioridad
+@enduml
