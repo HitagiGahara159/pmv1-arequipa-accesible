@@ -6,6 +6,8 @@ from app.domain.reporte import TIPOS_BARRERA
 
 
 DESCRIPCION_MAX = 500
+EXTENSIONES_FOTO = (".jpg", ".jpeg", ".png")
+FOTO_MAX_BYTES = 5 * 1024 * 1024  # 5 MB
 
 # Area referencial de Arequipa metropolitana (debe validarse con la municipalidad)
 LATITUD_MIN, LATITUD_MAX = -16.55, -16.25
@@ -56,5 +58,9 @@ def validar_solicitud(s):
 
     if s.foto is None or not s.foto.contenido:
         raise ValidacionError("foto", "La fotografía es obligatoria.")
+    if not s.foto.nombre_archivo.lower().endswith(EXTENSIONES_FOTO):
+        raise ValidacionError("foto", "Formato de fotografía no permitido. Use JPG o PNG.")
+    if len(s.foto.contenido) > FOTO_MAX_BYTES:
+        raise ValidacionError("foto", "La fotografía supera el tamaño máximo de 5 MB.")
 
     return DatosValidados(id_tipo, descripcion, latitud, longitud)
